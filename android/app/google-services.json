@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "960561517450",
+    "firebase_url": "https://flash-chat-c3d4a.firebaseio.com",
+    "project_id": "flash-chat-c3d4a",
+    "storage_bucket": "flash-chat-c3d4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960561517450:android:83587c21aa559ddd08ee73",
+        "android_client_info": {
+          "package_name": "co.tanyadinesh.flash_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "960561517450-40qjg7k0i09lm6riqtlj1ea5omemb8n3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjpnz8z8XCk32CYtLMjqzb38hT3YblN0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "960561517450-40qjg7k0i09lm6riqtlj1ea5omemb8n3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
