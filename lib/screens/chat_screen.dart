@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flutter/material.dart';
 
+final _firestore = Firestore.instance;
+FirebaseUser loggedInUser;
+
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat-screen';
   @override
@@ -11,8 +14,8 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
-  final _firestore = Firestore.instance;
-  FirebaseUser loggedInUser;
+  final textFieldController = TextEditingController();
+
   String messageText;
 
   @override
@@ -64,22 +67,29 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('messages').snapshots(),
+              stream: _firestore
+                  .collection('messages')
+                  .orderBy('timestamp', descending: false)
+                  .snapshots(),
+              //snapshot.data.documents.isNotEmpty
               builder: (context, snapshot) {
-                if (snapshot.data.documents.isNotEmpty) {
-                  final messages = snapshot.data.documents;
+                if (true) {
+                  final messages = snapshot.data.documents.reversed;
                   List<MessageBubble> messageBubbles = [];
                   for (var message in messages) {
                     final messageText = message.data['text'];
                     final messageSender = message.data['sender'];
+                    final currentUser = loggedInUser.email;
                     final messageWidget = MessageBubble(
                       text: messageText,
                       sender: messageSender,
+                      isMe: messageSender == currentUser,
                     );
                     messageBubbles.add(messageWidget);
                   }
                   return Expanded(
                     child: ListView(
+                      reverse: true,
                       padding:
                           EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                       children: messageBubbles,
@@ -101,6 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: textFieldController,
                       onChanged: (value) {
                         messageText = value;
                       },
@@ -113,7 +124,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         _firestore.collection('messages').add({
                           'text': messageText,
                           'sender': loggedInUser.email,
+                          'timestamp': FieldValue.serverTimestamp(),
                         });
+                        textFieldController.clear();
+                        messageText = '';
                       }
                     },
                     child: Text(
@@ -132,17 +146,19 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender, this.text});
+  MessageBubble({this.sender, this.text, this.isMe});
 
   final String sender;
   final String text;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             sender,
@@ -150,12 +166,18 @@ class MessageBubble extends StatelessWidget {
           ),
           Material(
             elevation: 5.0,
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(5)),
-            color: Colors.amber,
+            borderRadius: isMe
+                ? BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(5))
+                : BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(30)),
+            color: isMe ? Colors.amber : Colors.redAccent,
             child: Padding(
               padding: EdgeInsets.symmetric(
                 vertical: 5,
