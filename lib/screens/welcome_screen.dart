@@ -1,9 +1,8 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flash_chat/components/rounded_button.dart';
-
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome-screen';
@@ -11,10 +10,10 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin {
-
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
   AnimationController controller;
-  Animation animation1,animation2;
+  Animation animation1, animation2;
 
   @override
   void initState() {
@@ -32,18 +31,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
 //        controller.forward();
 //      }
 //    });
-    animation2 = ColorTween(begin: Colors.blueGrey, end: Colors.white).animate(controller);
+    animation2 = ColorTween(begin: Colors.blueGrey, end: Colors.white)
+        .animate(controller);
     controller.forward();
     controller.addListener(() {
       setState(() {});
       //print(controller.value);
     });
   }
+
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +56,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-
             Row(
               children: <Widget>[
                 Hero(
@@ -66,11 +67,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                 ),
                 ColorizeAnimatedTextKit(
                     //repeatForever: true,
-                  totalRepeatCount: 2,
+                    totalRepeatCount: 2,
                     pause: Duration(milliseconds: 1),
-                    text: [
-                      "Flash Chat"
-                    ],
+                    text: ["Flash Chat"],
                     textStyle: TextStyle(
                       fontSize: 45.0,
                       fontWeight: FontWeight.w900,
@@ -82,8 +81,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                       Colors.yellow,
                     ],
                     textAlign: TextAlign.start,
-                    alignment: AlignmentDirectional.topStart // or Alignment.topLeft
-                ),
+                    alignment:
+                        AlignmentDirectional.topStart // or Alignment.topLeft
+                    ),
 //                Text(
 //                  'Flash Chat',
 //                  style: TextStyle(
@@ -93,17 +93,27 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
 //                ),
               ],
               //mainAxisAlignment: MainAxisAlignment.center,
-
             ),
             SizedBox(
               height: 48.0,
             ),
-            RoundedButton(title: 'Log in',colour: Colors.lightBlueAccent,onPressed:() {Navigator.pushNamed(context, LoginScreen.id);},),
-            RoundedButton(title: 'Register',colour: Colors.blueAccent,onPressed:() {Navigator.pushNamed(context, RegistrationScreen.id);},),
+            RoundedButton(
+              title: 'Log in',
+              colour: Colors.red,
+              onPressed: () {
+                Navigator.pushNamed(context, LoginScreen.id);
+              },
+            ),
+            RoundedButton(
+              title: 'Register',
+              colour: Colors.redAccent,
+              onPressed: () {
+                Navigator.pushNamed(context, RegistrationScreen.id);
+              },
+            ),
           ],
         ),
       ),
     );
   }
 }
-
